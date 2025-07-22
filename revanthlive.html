@@ -11,14 +11,15 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #dee2ca; /* Tana */
+            background-color: #a0d2eb; /* Light Blue */
         }
         .font-tangerine {
             font-family: 'Tangerine', cursive;
         }
         #field {
-            background-image: url('https://www.transparenttextures.com/patterns/gplay.png'), linear-gradient(to bottom, #5a8a5e, #2e5339 85%);
-            background-size: auto, cover;
+            background-color: #A7C7E7;
+            background-image: none;
+            background-size: cover;
             position: relative;
             width: 100%;
             height: 100%;
@@ -98,14 +99,15 @@
         .habit-path {
             transition: all 0.5s ease-in-out;
             stroke-linecap: round;
+            filter: url(#path-glow);
         }
         .path-pulse {
             animation: pulse-animation 1s ease-out;
         }
         @keyframes pulse-animation {
-            0% { filter: url(#glow); stroke-width: 4px; opacity: 1; }
-            50% { filter: url(#intense-glow); stroke-width: 8px; opacity: 1; }
-            100% { filter: url(#glow); stroke-width: 4px; opacity: 1; }
+            0% { filter: url(#path-glow); }
+            50% { filter: url(#path-pulse-filter); }
+            100% { filter: url(#path-glow); }
         }
         .modal, .toast {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -115,7 +117,8 @@
             filter: invert(0.5);
         }
         .bento-block {
-            background-color: #fbfbf3; /* Ecru White */
+            background-color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
         .todo-item-enter, .quote-fade, .sticky-note, .media-tile {
             animation: fadeIn 0.5s ease-out;
@@ -153,20 +156,20 @@
         .notes-btn:hover {
              color: rgba(0,0,0,0.6);
         }
-        .sticky-do { background-color: #fecaca; } /* Red-200 */
+        .sticky-do { background-color: #fecaca; }      /* Red-200 */
         .sticky-schedule { background-color: #fef08a; } /* Yellow-200 */
         .sticky-delegate { background-color: #bfdbfe; } /* Blue-200 */
-        .sticky-delete { background-color: #e5e7eb; } /* Gray-200 */
+        .sticky-delete { background-color: #e5e7eb; }   /* Gray-200 */
     </style>
 </head>
-<body class="bg-[#dee2ca]">
+<body class="bg-gradient-to-br from-[#a0d2eb] to-[#F0FFFF]">
 
     <header class="p-4 md:p-6 lg:p-8 lg:pb-6">
-        <div class="bento-block p-6 rounded-lg shadow-lg text-center relative">
+        <div class="bento-block p-6 rounded-lg shadow-xl text-center relative">
             <h1 class="font-tangerine text-6xl md:text-7xl font-bold" style="color: #5665f2;">Revanthnow</h1>
             <div class="absolute top-4 right-4 flex gap-4">
                 <a href="https://www.instagram.com/notyetrev/" target="_blank" class="text-gray-400 hover:text-[#5665f2] transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 012.153 2.153c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-2.153 2.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-2.153-2.153c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 012.153-2.153c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0-2a7 7 0 110 14 7 7 0 010-14zm6.406-1.185a1.285 1.285 0 100 2.57 1.285 1.285 0 000-2.57z" clip-rule="evenodd"/></svg>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 012.153 2.153c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-2.153 2.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-2.153-2.153c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049 1.064.218 1.791.465 2.427a4.902 4.902 0 012.153-2.153c.636-.247 1.363.416 2.427.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0-2a7 7 0 110 14 7 7 0 010-14zm6.406-1.185a1.285 1.285 0 100 2.57 1.285 1.285 0 000-2.57z" clip-rule="evenodd"/></svg>
                 </a>
                 <a href="https://www.linkedin.com/in/ch-revanth" target="_blank" class="text-gray-400 hover:text-[#5665f2] transition-colors">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
@@ -180,13 +183,13 @@
 
     <section class="px-4 md:px-6 lg:px-8 lg:pb-6">
         <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
-            <div class="bento-block md:col-span-4 p-6 rounded-lg shadow-lg flex flex-col justify-center">
+            <div class="bento-block md:col-span-4 p-6 rounded-lg shadow-xl flex flex-col justify-center">
                  <div id="quote-display" class="text-center">
                     <p class="text-2xl italic text-gray-700">"The secret of getting ahead is getting started."</p>
                     <p class="text-md text-gray-500 mt-2">- Mark Twain</p>
                  </div>
             </div>
-            <div class="bento-block md:col-span-2 p-6 rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+            <div class="bento-block md:col-span-2 p-6 rounded-lg shadow-xl flex flex-col justify-center items-center text-center">
                 <div id="time-display" class="text-4xl font-bold text-gray-800">12:00:00</div>
                 <div id="date-display" class="text-md text-gray-600">Sunday, 20 July 2025</div>
             </div>
@@ -195,36 +198,36 @@
 
     <main class="p-4 md:p-6 lg:p-8 lg:pt-0">
         <div class="flex flex-col gap-6">
-            <div class="bento-block p-4 rounded-lg shadow-lg flex flex-col md:flex-row gap-4 h-[70vh]">
-                <div class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4 overflow-y-auto p-1">
+            <div class="bento-block p-4 rounded-lg shadow-xl grid md:grid-cols-3 gap-4 min-h-[70vh]">
+                <div class="md:col-span-1 flex flex-col gap-4 overflow-y-auto p-1">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-800">Your Mind</h1>
                         <p class="text-sm text-gray-600 mt-1">Drag landmarks to organize.</p>
                     </div>
-                    <div id="end-of-day-section" class="border-t border-[#d6dbe6] pt-4 space-y-3">
+                    <div id="end-of-day-section" class="border-t border-gray-200 pt-4 space-y-3">
                         <div class="flex justify-between items-center">
                             <h2 class="text-lg font-semibold text-gray-700">Daily Actions</h2>
-                            <input type="date" id="action-date-picker" class="px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                            <input type="date" id="action-date-picker" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
                         </div>
                         <p class="text-xs text-gray-500">Check habits performed on the selected date.</p>
                         <div id="daily-actions-list" class="space-y-2 pr-2"></div>
-                        <button id="finalize-day-btn" class="w-full bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition mt-4">Finalize Day</button>
+                        <button id="finalize-day-btn" class="w-full bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold py-2 px-4 rounded-md transition mt-4">Finalize Day</button>
                     </div>
-                    <div class="border-t border-[#d6dbe6] pt-4 space-y-4">
+                    <div class="border-t border-gray-200 pt-4 space-y-4">
                         <div id="action-buttons" class="space-y-3">
-                            <button id="show-add-form-btn" class="w-full bg-[#b1b9ed] text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition">Add New Habit</button>
-                            <button id="show-export-form-btn" class="w-full bg-[#b1b9ed] text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition">Export History</button>
+                            <button id="show-add-form-btn" class="w-full bg-[#a0c4f2] hover:bg-[#8fb3e2] text-[#1f2f4f] font-bold py-2 px-4 rounded-md transition">Add New Habit</button>
+                            <button id="show-export-form-btn" class="w-full bg-[#a0c4f2] hover:bg-[#8fb3e2] text-[#1f2f4f] font-bold py-2 px-4 rounded-md transition">Export History</button>
                         </div>
                         <div id="add-habit-form" class="hidden space-y-3">
                             <h2 class="text-lg font-semibold text-gray-700">Add a New Path</h2>
-                            <input type="text" id="new-habit-name" placeholder="Habit name" class="w-full px-3 py-2 border border-[#d6dbe6] rounded-md">
-                            <select id="new-habit-type" class="w-full px-3 py-2 border border-[#d6dbe6] rounded-md bg-white">
+                            <input type="text" id="new-habit-name" placeholder="Habit name" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <select id="new-habit-type" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
                                 <option value="positive">Positive Path</option>
                                 <option value="negative">Negative Path</option>
                             </select>
                             <div class="flex gap-2">
-                                <button id="add-habit-btn" class="w-full bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Add</button>
-                                <button id="cancel-add-btn" class="w-full bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Cancel</button>
+                                <button id="add-habit-btn" class="w-full bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold py-2 px-4 rounded-md">Add</button>
+                                <button id="cancel-add-btn" class="w-full bg-[#c9d5ec] hover:bg-[#bccbe2] text-[#2f3640] font-bold py-2 px-4 rounded-md">Cancel</button>
                             </div>
                         </div>
                         <div id="export-form" class="hidden space-y-3">
@@ -232,21 +235,21 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label for="start-date" class="text-xs font-medium text-gray-600">Start</label>
-                                    <input type="date" id="start-date" class="w-full px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                                    <input type="date" id="start-date" class="w-full px-2 py-1 border border-gray-300 rounded-md text-sm">
                                 </div>
                                 <div>
                                     <label for="end-date" class="text-xs font-medium text-gray-600">End</label>
-                                    <input type="date" id="end-date" class="w-full px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                                    <input type="date" id="end-date" class="w-full px-2 py-1 border border-gray-300 rounded-md text-sm">
                                 </div>
                             </div>
                             <div class="flex gap-2">
-                                <button id="export-btn" class="w-full bg-green-700 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800">Export</button>
-                                <button id="cancel-export-btn" class="w-full bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Cancel</button>
+                                <button id="export-btn" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-md">Export</button>
+                                <button id="cancel-export-btn" class="w-full bg-[#c9d5ec] hover:bg-[#bccbe2] text-[#2f3640] font-bold py-2 px-4 rounded-md">Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="field-container" class="flex-grow h-full w-full relative min-h-0">
+                <div id="field-container" class="md:col-span-2 h-full w-full relative min-h-0">
                     <div id="field">
                         <div id="central-point" title="This is You">
                             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -287,60 +290,60 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                <div class="bento-block p-6 rounded-lg shadow-xl flex flex-col">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Pomodoro Timer</h2>
                     <div class="flex-grow flex flex-col items-center justify-center">
                         <div id="pomodoro-time" class="text-6xl font-bold text-gray-800">25:00</div>
                         <div class="flex gap-2 mt-4">
-                            <button id="pomodoro-start" class="bg-[#5665f2] text-white px-4 py-2 rounded-md hover:bg-opacity-90">Start</button>
-                            <button id="pomodoro-pause" class="bg-[#d6dbe6] text-gray-800 px-4 py-2 rounded-md hover:bg-opacity-90">Pause</button>
-                            <button id="pomodoro-reset" class="bg-[#d6dbe6] text-gray-800 px-4 py-2 rounded-md hover:bg-opacity-90">Reset</button>
+                            <button id="pomodoro-start" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white px-4 py-2 rounded-md">Start</button>
+                            <button id="pomodoro-pause" class="bg-[#c9d5ec] hover:bg-[#bccbe2] text-[#2f3640] px-4 py-2 rounded-md">Pause</button>
+                            <button id="pomodoro-reset" class="bg-[#c9d5ec] hover:bg-[#bccbe2] text-[#2f3640] px-4 py-2 rounded-md">Reset</button>
                         </div>
-                        <div class="flex gap-2 mt-6 border-t border-[#d6dbe6] pt-4">
-                            <button class="pomodoro-mode-btn bg-[#b1b9ed] text-slate-800 text-sm px-3 py-1 rounded-full" data-time="1500">Pomodoro</button>
+                        <div class="flex gap-2 mt-6 border-t border-gray-200 pt-4">
+                            <button class="pomodoro-mode-btn bg-blue-200 text-blue-800 text-sm px-3 py-1 rounded-full" data-time="1500">Pomodoro</button>
                             <button class="pomodoro-mode-btn bg-transparent text-slate-600 text-sm px-3 py-1 rounded-full" data-time="300">Short Break</button>
                             <button class="pomodoro-mode-btn bg-transparent text-slate-600 text-sm px-3 py-1 rounded-full" data-time="900">Long Break</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                <div class="bento-block p-6 rounded-lg shadow-xl flex flex-col">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">To-Do List</h2>
                     <div class="flex gap-2 mb-4">
-                        <input type="text" id="new-todo-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md focus:ring-2 focus:ring-[#5665f2] focus:outline-none bg-transparent" placeholder="Add a new task...">
-                        <button id="add-todo-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                        <input type="text" id="new-todo-input" class="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5665f2] focus:outline-none bg-transparent" placeholder="Add a new task...">
+                        <button id="add-todo-btn" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold px-4 rounded-md">Add</button>
                     </div>
                     <div id="todo-list" class="space-y-2 overflow-y-auto flex-grow"></div>
-                     <div id="completed-list" class="mt-4 border-t border-[#d6dbe6] pt-2 space-y-2 overflow-y-auto"></div>
+                     <div id="completed-list" class="mt-4 border-t border-gray-200 pt-2 space-y-2 overflow-y-auto"></div>
                 </div>
             </div>
             
-            <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+            <div class="bento-block p-6 rounded-lg shadow-xl flex flex-col">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Urgent/Important Matrix</h2>
                 <div class="flex gap-2 mb-4">
-                    <input type="text" id="new-matrix-task-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="New task...">
-                    <select id="matrix-quadrant-select" class="px-3 py-2 border border-[#d6dbe6] rounded-md bg-white">
+                    <input type="text" id="new-matrix-task-input" class="flex-grow px-3 py-2 border border-gray-300 rounded-md bg-transparent" placeholder="New task...">
+                    <select id="matrix-quadrant-select" class="px-3 py-2 border border-gray-300 rounded-md bg-white">
                         <option value="do">Urgent & Important</option>
                         <option value="schedule">Important, Not Urgent</option>
                         <option value="delegate">Urgent, Not Important</option>
                         <option value="delete">Not Urgent, Not Important</option>
                     </select>
-                    <button id="add-matrix-task-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                    <button id="add-matrix-task-btn" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold px-4 rounded-md">Add</button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
-                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                    <div class="border border-gray-200 rounded-lg p-3 flex flex-col">
                         <h3 class="font-bold text-red-600 mb-2">Urgent & Important (Do)</h3>
                         <div id="quadrant-do" class="space-y-2 overflow-y-auto"></div>
                     </div>
-                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                    <div class="border border-gray-200 rounded-lg p-3 flex flex-col">
                         <h3 class="font-bold text-yellow-600 mb-2">Important, Not Urgent (Schedule)</h3>
                         <div id="quadrant-schedule" class="space-y-2 overflow-y-auto"></div>
                     </div>
-                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                    <div class="border border-gray-200 rounded-lg p-3 flex flex-col">
                         <h3 class="font-bold text-blue-600 mb-2">Urgent, Not Important (Delegate)</h3>
                         <div id="quadrant-delegate" class="space-y-2 overflow-y-auto"></div>
                     </div>
-                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                    <div class="border border-gray-200 rounded-lg p-3 flex flex-col">
                         <h3 class="font-bold text-gray-600 mb-2">Not Urgent, Not Important (Delete)</h3>
                         <div id="quadrant-delete" class="space-y-2 overflow-y-auto"></div>
                     </div>
@@ -348,19 +351,19 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                <div class="bento-block p-6 rounded-lg shadow-xl flex flex-col">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Currently Reading</h2>
                     <div class="flex gap-2 mb-4">
-                        <input type="text" id="new-book-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="Add a book title...">
-                        <button id="add-book-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                        <input type="text" id="new-book-input" class="flex-grow px-3 py-2 border border-gray-300 rounded-md bg-transparent" placeholder="Add a book title...">
+                        <button id="add-book-btn" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold px-4 rounded-md">Add</button>
                     </div>
                     <div id="reading-list" class="space-y-2 overflow-y-auto flex-grow"></div>
                 </div>
-                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                <div class="bento-block p-6 rounded-lg shadow-xl flex flex-col">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Currently Watching</h2>
                     <div class="flex gap-2 mb-4">
-                        <input type="text" id="new-media-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="Add a movie/show title...">
-                        <button id="add-media-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                        <input type="text" id="new-media-input" class="flex-grow px-3 py-2 border border-gray-300 rounded-md bg-transparent" placeholder="Add a movie/show title...">
+                        <button id="add-media-btn" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold px-4 rounded-md">Add</button>
                     </div>
                     <div id="watching-list" class="space-y-2 overflow-y-auto flex-grow"></div>
                 </div>
@@ -376,15 +379,8 @@
     <div id="custom-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden opacity-0"></div>
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"></div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, onSnapshot, updateDoc, deleteDoc, serverTimestamp, query, where, getDocs, Timestamp, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "DEMO", authDomain: "DEMO", projectId: "DEMO" };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-habit-tracker';
-        
-        let db, auth, userId, habits = [], draggedElement = null, todos = [], matrixTasks = [], readingList = [], watchingList = [];
+    <script>
+        let userId, habits = [], draggedElement = null, todos = [], matrixTasks = [], readingList = [], watchingList = [], history = [];
 
         // DOM Elements
         const timeDisplay = document.getElementById('time-display');
@@ -435,6 +431,48 @@
         const addMediaBtn = document.getElementById('add-media-btn');
         const watchingListDiv = document.getElementById('watching-list');
 
+        // --- Local Storage Logic ---
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function getUserId() {
+            let id = localStorage.getItem('dashboard-userId');
+            if (!id) {
+                id = generateUUID();
+                localStorage.setItem('dashboard-userId', id);
+            }
+            return id;
+        }
+
+        function saveData() {
+            const data = {
+                habits,
+                todos,
+                matrixTasks,
+                readingList,
+                watchingList,
+                history
+            };
+            localStorage.setItem(`dashboard-data-${userId}`, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const dataString = localStorage.getItem(`dashboard-data-${userId}`);
+            if (dataString) {
+                const data = JSON.parse(dataString);
+                habits = data.habits || [];
+                todos = data.todos || [];
+                matrixTasks = data.matrixTasks || [];
+                readingList = data.readingList || [];
+                watchingList = data.watchingList || [];
+                history = data.history || [];
+            }
+        }
+
         // --- Quotes Logic ---
         const quotes = [
             { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
@@ -484,6 +522,7 @@
                 if (pomodoroSeconds <= 0) {
                     clearInterval(pomodoroInterval);
                     pomodoroIsRunning = false;
+                    showToast("Pomodoro session finished!", "success");
                 }
             }, 1000);
         }
@@ -492,7 +531,7 @@
             pomodoroIsRunning = false;
             clearInterval(pomodoroInterval);
         }
-
+        
         function resetPomodoro(seconds) {
             pausePomodoro();
             pomodoroSeconds = seconds;
@@ -501,13 +540,20 @@
         
         pomodoroStartBtn.addEventListener('click', startPomodoro);
         pomodoroPauseBtn.addEventListener('click', pausePomodoro);
-        pomodoroResetBtn.addEventListener('click', () => resetPomodoro(parseInt(document.querySelector('.pomodoro-mode-btn.bg-\\[\\#b1b9ed\\]').dataset.time)));
-        
+        pomodoroResetBtn.addEventListener('click', () => {
+            const activeModeBtn = document.querySelector('.pomodoro-mode-btn.bg-blue-200');
+            const time = activeModeBtn ? parseInt(activeModeBtn.dataset.time) : 1500;
+            resetPomodoro(time);
+        });
+
         pomodoroModeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                pomodoroModeBtns.forEach(b => b.classList.replace('bg-[#b1b9ed]', 'bg-transparent', 'text-slate-800', 'text-slate-600'));
-                btn.classList.replace('bg-transparent', 'bg-[#b1b9ed]');
-                btn.classList.replace('text-slate-600', 'text-slate-800');
+                pomodoroModeBtns.forEach(b => {
+                    b.classList.remove('bg-blue-200', 'text-blue-800');
+                    b.classList.add('bg-transparent', 'text-slate-600');
+                });
+                btn.classList.add('bg-blue-200', 'text-blue-800');
+                btn.classList.remove('bg-transparent', 'text-slate-600');
                 resetPomodoro(parseInt(btn.dataset.time));
             });
         });
@@ -517,8 +563,8 @@
             todoList.innerHTML = '';
             completedList.innerHTML = '';
             
-            const activeTodos = todos.filter(t => !t.completed);
-            const completedTodos = todos.filter(t => t.completed);
+            const activeTodos = todos.filter(t => !t.completed).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const completedTodos = todos.filter(t => t.completed).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
             activeTodos.forEach(todo => todoList.appendChild(createTodoElement(todo)));
             
@@ -529,6 +575,7 @@
                 completedList.appendChild(completedTitle);
                 completedTodos.forEach(todo => completedList.appendChild(createTodoElement(todo)));
             }
+            saveData();
         }
 
         function createTodoElement(todo) {
@@ -544,49 +591,30 @@
             return div;
         }
 
-        async function addTodo() {
+        function addTodo() {
             const text = newTodoInput.value.trim();
-            if (!text || !userId) return;
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/todos`), {
-                    text,
-                    completed: false,
-                    createdAt: serverTimestamp()
-                });
-                newTodoInput.value = '';
-            } catch (error) {
-                console.error("Error adding todo:", error);
-            }
-        }
-
-        async function toggleTodo(id, completed) {
-            if (!userId) return;
-            const todoRef = doc(db, `artifacts/${appId}/users/${userId}/todos`, id);
-            try {
-                await updateDoc(todoRef, { completed });
-            } catch (error) {
-                console.error("Error toggling todo:", error);
-            }
-        }
-
-        async function deleteTodo(id) {
-            if (!userId) return;
-            const todoRef = doc(db, `artifacts/${appId}/users/${userId}/todos`, id);
-            try {
-                await deleteDoc(todoRef);
-            } catch (error) {
-                console.error("Error deleting todo:", error);
-            }
-        }
-        
-        function setupTodoListener() {
-            if (!userId) return;
-            const todosCollection = collection(db, `artifacts/${appId}/users/${userId}/todos`);
-            const q = query(todosCollection, orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                todos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderTodos();
+            if (!text) return;
+            todos.push({
+                id: generateUUID(),
+                text,
+                completed: false,
+                createdAt: new Date().toISOString()
             });
+            newTodoInput.value = '';
+            renderTodos();
+        }
+
+        function toggleTodo(id, completed) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = completed;
+                renderTodos();
+            }
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            renderTodos();
         }
         
         addTodoBtn.addEventListener('click', addTodo);
@@ -601,7 +629,7 @@
             quadrantDelegate.innerHTML = '';
             quadrantDelete.innerHTML = '';
 
-            matrixTasks.forEach(task => {
+            matrixTasks.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(task => {
                 const note = document.createElement('div');
                 note.className = 'sticky-note';
                 note.innerHTML = `
@@ -611,59 +639,32 @@
                 note.querySelector('.item-delete-btn').addEventListener('click', (e) => deleteMatrixTask(e.target.dataset.id));
 
                 switch(task.quadrant) {
-                    case 'do':
-                        note.classList.add('sticky-do');
-                        quadrantDo.appendChild(note);
-                        break;
-                    case 'schedule':
-                        note.classList.add('sticky-schedule');
-                        quadrantSchedule.appendChild(note);
-                        break;
-                    case 'delegate':
-                        note.classList.add('sticky-delegate');
-                        quadrantDelegate.appendChild(note);
-                        break;
-                    case 'delete':
-                        note.classList.add('sticky-delete');
-                        quadrantDelete.appendChild(note);
-                        break;
+                    case 'do': note.classList.add('sticky-do'); quadrantDo.appendChild(note); break;
+                    case 'schedule': note.classList.add('sticky-schedule'); quadrantSchedule.appendChild(note); break;
+                    case 'delegate': note.classList.add('sticky-delegate'); quadrantDelegate.appendChild(note); break;
+                    case 'delete': note.classList.add('sticky-delete'); quadrantDelete.appendChild(note); break;
                 }
             });
+            saveData();
         }
 
-        async function addMatrixTask() {
+        function addMatrixTask() {
             const text = newMatrixTaskInput.value.trim();
             const quadrant = matrixQuadrantSelect.value;
-            if (!text || !userId) return;
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/matrixTasks`), {
-                    text,
-                    quadrant,
-                    createdAt: serverTimestamp()
-                });
-                newMatrixTaskInput.value = '';
-            } catch (error) {
-                console.error("Error adding matrix task:", error);
-            }
-        }
-
-        async function deleteMatrixTask(id) {
-            if (!userId) return;
-            try {
-                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/matrixTasks`, id));
-            } catch (error) {
-                console.error("Error deleting matrix task:", error);
-            }
-        }
-
-        function setupMatrixListener() {
-            if (!userId) return;
-            const matrixCollection = collection(db, `artifacts/${appId}/users/${userId}/matrixTasks`);
-            const q = query(matrixCollection, orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                matrixTasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderMatrix();
+            if (!text) return;
+            matrixTasks.push({
+                id: generateUUID(),
+                text,
+                quadrant,
+                createdAt: new Date().toISOString()
             });
+            newMatrixTaskInput.value = '';
+            renderMatrix();
+        }
+
+        function deleteMatrixTask(id) {
+            matrixTasks = matrixTasks.filter(t => t.id !== id);
+            renderMatrix();
         }
 
         addMatrixTaskBtn.addEventListener('click', addMatrixTask);
@@ -672,9 +673,15 @@
         });
         
         // --- Reading/Watching Logic ---
-        function renderMediaList(list, container, collectionName) {
+        function renderAllMediaLists() {
+            renderMediaList(readingList, readingListDiv, 'reading');
+            renderMediaList(watchingList, watchingListDiv, 'watching');
+            saveData();
+        }
+
+        function renderMediaList(list, container, type) {
             container.innerHTML = '';
-            list.forEach(item => {
+            list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(item => {
                 const tile = document.createElement('div');
                 tile.className = 'media-tile bg-gray-100';
                 tile.innerHTML = `
@@ -684,43 +691,42 @@
                 `;
                 tile.querySelector('.item-delete-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    deleteMediaItem(item.id, collectionName);
+                    deleteMediaItem(item.id, type);
                 });
                 tile.querySelector('.notes-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    showNotesModal(item.id, item.title, item.notes || '', collectionName);
+                    showNotesModal(item.id, item.title, item.notes || '', type);
                 });
                 container.appendChild(tile);
             });
         }
 
-        async function addMediaItem(type) {
+        function addMediaItem(type) {
+            const list = type === 'reading' ? readingList : watchingList;
             const input = type === 'reading' ? newBookInput : newMediaInput;
             const title = input.value.trim();
-            if (!title || !userId) return;
-            const collectionName = type === 'reading' ? 'readingItems' : 'watchingItems';
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/${collectionName}`), {
-                    title,
-                    notes: '',
-                    createdAt: serverTimestamp()
-                });
-                input.value = '';
-            } catch (error) {
-                console.error(`Error adding ${type} item:`, error);
-            }
+            if (!title) return;
+            
+            list.push({
+                id: generateUUID(),
+                title,
+                notes: '',
+                createdAt: new Date().toISOString()
+            });
+            input.value = '';
+            renderAllMediaLists();
         }
 
-        async function deleteMediaItem(id, collectionName) {
-             if (!userId) return;
-            try {
-                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, id));
-            } catch(error) {
-                console.error(`Error deleting ${collectionName} item:`, error);
+        function deleteMediaItem(id, type) {
+            if (type === 'reading') {
+                readingList = readingList.filter(item => item.id !== id);
+            } else {
+                watchingList = watchingList.filter(item => item.id !== id);
             }
+            renderAllMediaLists();
         }
         
-        function showNotesModal(id, title, notes, collectionName) {
+        function showNotesModal(id, title, notes, type) {
             showModal({
                 title: `Notes for ${title}`,
                 text: `<textarea id="notes-textarea" class="w-full h-32 p-2 border border-[#d6dbe6] rounded-md bg-transparent">${notes}</textarea>`,
@@ -728,39 +734,27 @@
                 cancelText: "Cancel",
                 onConfirm: () => {
                     const newNotes = document.getElementById('notes-textarea').value;
-                    updateNotes(id, newNotes, collectionName);
+                    updateNotes(id, newNotes, type);
                 }
             });
         }
         
-        async function updateNotes(id, notes, collectionName) {
-            if (!userId) return;
-            try {
-                await updateDoc(doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, id), { notes });
+        function updateNotes(id, notes, type) {
+            const list = type === 'reading' ? readingList : watchingList;
+            const item = list.find(i => i.id === id);
+            if (item) {
+                item.notes = notes;
                 showToast("Notes saved!");
-            } catch (error) {
-                console.error("Error saving notes:", error);
+                saveData();
+            } else {
                 showToast("Failed to save notes.", "error");
             }
-        }
-
-        function setupMediaListeners() {
-            if (!userId) return;
-            onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/readingItems`), orderBy("createdAt", "desc")), (snapshot) => {
-                readingList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderMediaList(readingList, readingListDiv, 'readingItems');
-            });
-            onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/watchingItems`), orderBy("createdAt", "desc")), (snapshot) => {
-                watchingList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderMediaList(watchingList, watchingListDiv, 'watchingItems');
-            });
         }
 
         addBookBtn.addEventListener('click', () => addMediaItem('reading'));
         newBookInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addMediaItem('reading'); });
         addMediaBtn.addEventListener('click', () => addMediaItem('watching'));
         newMediaInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addMediaItem('watching'); });
-
 
         // --- Habit Tracker Logic ---
         function showToast(message, type = 'success') {
@@ -782,8 +776,8 @@
                     <h2 class="text-xl font-bold mb-4">${title}</h2>
                     <div class="text-gray-700 mb-6">${text}</div>
                     <div class="flex justify-end gap-4">
-                        ${cancelText ? `<button id="modal-cancel-btn-inner" class="bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">${cancelText}</button>` : ''}
-                        <button id="modal-confirm-btn-inner" class="bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90">${confirmText}</button>
+                        ${cancelText ? `<button id="modal-cancel-btn-inner" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-gray-300">${cancelText}</button>` : ''}
+                        <button id="modal-confirm-btn-inner" class="bg-[#4251d6] hover:bg-[#3b4aca] text-white font-bold py-2 px-4 rounded-md">${confirmText}</button>
                     </div>
                 </div>
             `;
@@ -830,10 +824,31 @@
         function renderField() {
             if (!field) return;
             landmarksContainer.innerHTML = '';
-            pathsSvg.innerHTML = '';
+            pathsSvg.innerHTML = ''; // Clear previous paths
+             // Ensure this definition block is only added once or cleared properly
+            const defs = `<defs>
+                <filter id="path-glow">
+                    <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="path-pulse-filter">
+                    <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>`;
+            pathsSvg.innerHTML = defs;
+            
             const fieldRect = field.getBoundingClientRect();
             const centerX = fieldRect.width / 2;
             const centerY = fieldRect.height / 2;
+            const centerRadius = 30; // 60px width / 2
+
             habits.forEach(habit => {
                 const landmark = document.createElement('div');
                 landmark.className = 'habit-landmark';
@@ -852,18 +867,40 @@
                 landmark.appendChild(deleteBtn);
                 landmark.appendChild(landmarkText);
                 landmarksContainer.appendChild(landmark);
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                path.id = `path-${habit.id}`;
-                path.setAttribute('x1', centerX);
-                path.setAttribute('y1', centerY);
-                path.setAttribute('x2', (habit.position.x / 100) * fieldRect.width);
-                path.setAttribute('y2', (habit.position.y / 100) * fieldRect.height);
-                path.setAttribute('stroke', habit.type === 'positive' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(50, 50, 50, 0.7)');
-                path.setAttribute('stroke-width', Math.max(1, habit.strength / 4));
-                path.setAttribute('opacity', Math.min(1, habit.strength / 40 + 0.1));
-                path.classList.add('habit-path');
-                pathsSvg.appendChild(path);
             });
+
+            // Second loop to draw paths now that landmarks are in the DOM
+            requestAnimationFrame(() => {
+                landmarksContainer.querySelectorAll('.habit-landmark').forEach(landmark => {
+                    const habitId = landmark.dataset.id;
+                    const habit = habits.find(h => h.id === habitId);
+                    if (!habit) return;
+
+                    const landmarkRadius = landmark.offsetHeight / 2;
+                    const habitX = landmark.offsetLeft + landmark.offsetWidth / 2;
+                    const habitY = landmark.offsetTop + landmarkRadius;
+                    
+                    const angle = Math.atan2(habitY - centerY, habitX - centerX);
+
+                    const x1 = centerX + centerRadius * Math.cos(angle);
+                    const y1 = centerY + centerRadius * Math.sin(angle);
+                    const x2 = habitX - landmarkRadius * Math.cos(angle);
+                    const y2 = habitY - landmarkRadius * Math.sin(angle);
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    path.id = `path-${habitId}`;
+                    path.setAttribute('x1', x1);
+                    path.setAttribute('y1', y1);
+                    path.setAttribute('x2', x2);
+                    path.setAttribute('y2', y2);
+                    path.setAttribute('stroke', habit.type === 'positive' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(50, 50, 50, 0.7)');
+                    path.setAttribute('stroke-width', Math.max(1, habit.strength / 4));
+                    path.setAttribute('opacity', Math.min(1, habit.strength / 40 + 0.1));
+                    path.classList.add('habit-path');
+                    pathsSvg.appendChild(path);
+                });
+            });
+            saveData();
         };
 
         function formatDate(date) {
@@ -874,25 +911,22 @@
             return `${day}-${month}-${year}`;
         };
 
-        async function finalizeDay() {
-            if (!userId) return;
+        function finalizeDay() {
             const checkboxes = dailyActionsList.querySelectorAll('input[type="checkbox"]');
-            const promises = [];
             const performedHabits = [];
             const selectedDateStr = actionDatePicker.value;
             if (!selectedDateStr) {
                 showModal({ title: "Error", text: "Please select a date to log actions." });
                 return;
             }
-            const selectedDate = new Date(selectedDateStr + 'T00:00:00');
 
             checkboxes.forEach(box => {
                 const habitId = box.dataset.habitId;
                 const habit = habits.find(h => h.id === habitId);
                 if (!habit) return;
-                let newStrength;
+
                 if (box.checked) {
-                    newStrength = (habit.strength || 0) + 10;
+                    habit.strength = (habit.strength || 0) + 10;
                     performedHabits.push(habit.name);
                     const pathElement = document.getElementById(`path-${habit.id}`);
                     if (pathElement) {
@@ -900,48 +934,43 @@
                         pathElement.addEventListener('animationend', () => pathElement.classList.remove('path-pulse'), { once: true });
                     }
                 } else {
-                    newStrength = Math.max(0, (habit.strength || 0) - 2);
+                    habit.strength = Math.max(0, (habit.strength || 0) - 2);
                 }
-                const habitRef = doc(db, `artifacts/${appId}/users/${userId}/habits`, habit.id);
-                promises.push(updateDoc(habitRef, { strength: newStrength, lastUpdated: serverTimestamp() }));
+                habit.lastUpdated = new Date().toISOString();
             });
 
             if (performedHabits.length > 0) {
-                const historyRef = collection(db, `artifacts/${appId}/users/${userId}/history`);
-                promises.push(addDoc(historyRef, {
-                    date: Timestamp.fromDate(selectedDate),
+                history.push({
+                    date: selectedDateStr, // Store as simple YYYY-MM-DD string
                     habitsPerformed: performedHabits
-                }));
+                });
             }
 
-            try {
-                await Promise.all(promises);
-                checkboxes.forEach(box => box.checked = false);
-                showToast(`Actions for ${formatDate(selectedDate)} logged!`);
-            } catch (error) {
-                console.error("Error finalizing day:", error);
-                showToast('Failed to log actions.', 'error');
-            }
+            checkboxes.forEach(box => box.checked = false);
+            showToast(`Actions for ${formatDate(selectedDateStr)} logged!`);
+            renderField(); // Re-render to update path strengths and save data
         };
 
-        async function addNewHabit() {
+        function addNewHabit() {
             const name = newHabitNameInput.value.trim();
-            if (!name || !userId) {
+            if (!name) {
                 showModal({ title: "Error", text: "Please enter a habit name." });
                 return;
             }
-            const newHabitData = {
-                name, type: newHabitTypeSelect.value, strength: 5, createdAt: serverTimestamp(), lastUpdated: serverTimestamp(),
+            habits.push({
+                id: generateUUID(),
+                name, 
+                type: newHabitTypeSelect.value, 
+                strength: 5, 
+                createdAt: new Date().toISOString(),
+                lastUpdated: new Date().toISOString(),
                 position: { x: Math.random() * 80 + 10, y: Math.random() * 80 + 10 }
-            };
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/habits`), newHabitData);
-                newHabitNameInput.value = '';
-                addHabitForm.classList.add('hidden');
-                actionButtons.classList.remove('hidden');
-            } catch (error) {
-                console.error("Error adding new habit:", error);
-            }
+            });
+            newHabitNameInput.value = '';
+            addHabitForm.classList.add('hidden');
+            actionButtons.classList.remove('hidden');
+            renderField();
+            renderDailyActions();
         };
         
         function confirmDeleteHabit(habitId, habitName) {
@@ -951,80 +980,74 @@
             });
         };
 
-        async function deleteHabit(habitId) {
-            if (!userId) return;
-            try {
-                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/habits`, habitId));
-            } catch(error) {
-                console.error("Error deleting habit:", error);
-            }
+        function deleteHabit(habitId) {
+            habits = habits.filter(h => h.id !== habitId);
+            renderField();
+            renderDailyActions();
         };
 
-        async function exportHistoryToCSV() {
-            if (!userId) {
-                showModal({ title: "Error", text: "You must be signed in to export data." });
-                return;
-            }
-            const startDate = startDateInput.value ? new Date(startDateInput.value + 'T00:00:00') : null;
-            const endDate = endDateInput.value ? new Date(endDateInput.value + 'T23:59:59') : null;
-            if (!startDate || !endDate) {
+        function exportHistoryToCSV() {
+            const startDateStr = startDateInput.value;
+            const endDateStr = endDateInput.value;
+            
+            if (!startDateStr || !endDateStr) {
                 showModal({ title: "Error", text: "Please select a valid start and end date." });
                 return;
             }
-            const historyCollection = collection(db, `artifacts/${appId}/users/${userId}/history`);
-            const q = query(historyCollection, where("date", ">=", Timestamp.fromDate(startDate)), where("date", "<=", Timestamp.fromDate(endDate)));
-            try {
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) {
-                    showModal({ title: "No Data", text: "No history found for the selected date range."});
-                    return;
-                }
 
-                const allHabitNames = habits.map(h => h.name);
-                const performedMap = {};
-                querySnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const dateStr = formatDate(data.date.toDate());
-                    if (!performedMap[dateStr]) {
-                        performedMap[dateStr] = {};
-                    }
-                    data.habitsPerformed.forEach(habitName => {
-                        performedMap[dateStr][habitName] = true;
-                    });
-                });
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
 
-                const dateRange = [];
-                let currentDate = new Date(startDate);
-                while (currentDate <= endDate) {
-                    dateRange.push(formatDate(currentDate));
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-
-                const headers = ["Date", ...allHabitNames].map(h => `"${h.replace(/"/g, '""')}"`).join(',');
-                let csvContent = headers + '\n';
-
-                dateRange.forEach(dateStr => {
-                    const row = [dateStr];
-                    allHabitNames.forEach(habitName => {
-                        const wasPerformed = performedMap[dateStr] && performedMap[dateStr][habitName];
-                        row.push(wasPerformed ? "Followed" : "Bunked");
-                    });
-                    csvContent += row.join(',') + '\n';
-                });
-
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", "habit_history.csv");
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (error) {
-                console.error("Error exporting history:", error);
-                showModal({ title: "Export Failed", text: "An error occurred while exporting your data."});
+            const filteredHistory = history.filter(entry => {
+                const entryDate = new Date(entry.date);
+                return entryDate >= startDate && entryDate <= endDate;
+            });
+             
+            if (filteredHistory.length === 0) {
+                showModal({ title: "No Data", text: "No history found for the selected date range."});
+                return;
             }
+
+            const allHabitNames = habits.map(h => h.name);
+            const performedMap = {};
+            filteredHistory.forEach(entry => {
+                const dateStr = formatDate(entry.date);
+                if (!performedMap[dateStr]) {
+                    performedMap[dateStr] = {};
+                }
+                entry.habitsPerformed.forEach(habitName => {
+                    performedMap[dateStr][habitName] = true;
+                });
+            });
+
+            const dateRange = [];
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                dateRange.push(formatDate(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            const headers = ["Date", ...allHabitNames].map(h => `"${h.replace(/"/g, '""')}"`).join(',');
+            let csvContent = headers + '\n';
+
+            dateRange.forEach(dateStr => {
+                const row = [dateStr];
+                allHabitNames.forEach(habitName => {
+                    const wasPerformed = performedMap[dateStr] && performedMap[dateStr][habitName];
+                    row.push(wasPerformed ? "Followed" : "Bunked");
+                });
+                csvContent += row.join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "habit_history.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         };
 
         function startDrag(e) {
@@ -1047,64 +1070,59 @@
             const newYPercent = (newY / fieldRect.height) * 100;
             draggedElement.style.left = `${newXPercent}%`;
             draggedElement.style.top = `${newYPercent}%`;
-            const path = document.getElementById(`path-${draggedElement.dataset.id}`);
-            if (path) {
-                path.setAttribute('x2', newX);
-                path.setAttribute('y2', newY);
+            
+            // Live path update
+            const pathId = `path-${draggedElement.dataset.id}`;
+            const path = document.getElementById(pathId);
+            if(path) {
+                const centerX = fieldRect.width / 2;
+                const centerY = fieldRect.height / 2;
+                const centerRadius = 30;
+                const landmarkRadius = draggedElement.offsetHeight / 2;
+                const habitX = newX;
+                const habitY = newY;
+                const angle = Math.atan2(habitY - centerY, habitX - centerX);
+
+                const x1 = centerX + centerRadius * Math.cos(angle);
+                const y1 = centerY + centerRadius * Math.sin(angle);
+                const x2 = habitX - landmarkRadius * Math.cos(angle);
+                const y2 = habitY - landmarkRadius * Math.sin(angle);
+                
+                path.setAttribute('x1', x1);
+                path.setAttribute('y1', y1);
+                path.setAttribute('x2', x2);
+                path.setAttribute('y2', y2);
             }
         };
 
-        async function endDrag() {
+        function endDrag() {
             if (!draggedElement) return;
-            window.removeEventListener('mousemove', onDrag);
-            window.removeEventListener('mouseup', endDrag);
             const habitId = draggedElement.dataset.id;
-            const finalPosition = { x: parseFloat(draggedElement.style.left), y: parseFloat(draggedElement.style.top) };
+            const habit = habits.find(h => h.id === habitId);
+            if(habit) {
+                 habit.position = { x: parseFloat(draggedElement.style.left), y: parseFloat(draggedElement.style.top) };
+                 saveData();
+            }
             draggedElement.classList.remove('dragging');
             draggedElement = null;
-            const habitRef = doc(db, `artifacts/${appId}/users/${userId}/habits`, habitId);
-            try {
-                await updateDoc(habitRef, { position: finalPosition });
-            } catch (error) {
-                console.error("Error updating habit position:", error);
-            }
+            window.removeEventListener('mousemove', onDrag);
+            window.removeEventListener('mouseup', endDrag);
         };
 
-        function setupHabitListener() {
-            if (!userId) return;
-            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/habits`), (snapshot) => {
-                habits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderField();
-                renderDailyActions();
-            });
-        };
+        // --- Initialization ---
+        window.onload = () => {
+            userId = getUserId();
+            userIdDisplay.textContent = userId;
+            loadData();
 
-        window.onload = async () => {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    userId = user.uid;
-                    userIdDisplay.textContent = userId;
-                    setupHabitListener();
-                    setupTodoListener();
-                    setupMatrixListener();
-                    setupMediaListeners();
-                } else {
-                    userIdDisplay.textContent = "Not signed in.";
-                }
-            });
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Authentication failed:", error);
-            }
-            
+            // Initial Renders
+            renderField();
+            renderDailyActions();
+            renderTodos();
+            renderMatrix();
+            renderAllMediaLists();
+
+            // Event Listeners
             showAddFormBtn.addEventListener('click', () => {
                 actionButtons.classList.add('hidden');
                 addHabitForm.classList.remove('hidden');
