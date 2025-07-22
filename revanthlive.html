@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #dee2ca; /* Tana */
+        }
+        .font-tangerine {
+            font-family: 'Tangerine', cursive;
+        }
+        #field {
+            background-image: url('https://www.transparenttextures.com/patterns/gplay.png'), linear-gradient(to bottom, #5a8a5e, #2e5339 85%);
+            background-size: auto, cover;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+        #field::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        #central-point {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            z-index: 10;
+            animation: pulse-center 4s infinite ease-in-out;
+        }
+        @keyframes pulse-center {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        .habit-landmark {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 500;
+            cursor: grab;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 10;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 0 10px rgba(255,255,255,0.1);
+        }
+        .habit-landmark:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.2);
+        }
+        .habit-landmark.dragging {
+            cursor: grabbing;
+            z-index: 20;
+            transform: scale(1.1);
+        }
+        .delete-btn {
+            display: none;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        .habit-landmark:hover .delete-btn {
+            display: block;
+        }
+        #paths-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .habit-path {
+            transition: all 0.5s ease-in-out;
+            stroke-linecap: round;
+        }
+        .path-pulse {
+            animation: pulse-animation 1s ease-out;
+        }
+        @keyframes pulse-animation {
+            0% { filter: url(#glow); stroke-width: 4px; opacity: 1; }
+            50% { filter: url(#intense-glow); stroke-width: 8px; opacity: 1; }
+            100% { filter: url(#glow); stroke-width: 4px; opacity: 1; }
+        }
+        .modal, .toast {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(0.5);
+        }
+        .bento-block {
+            background-color: #fbfbf3; /* Ecru White */
+        }
+        .todo-item-enter, .quote-fade, .sticky-note, .media-tile {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sticky-note, .media-tile {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .item-delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: rgba(0,0,0,0.3);
+            transition: color 0.2s;
+        }
+        .item-delete-btn:hover {
+            color: rgba(0,0,0,0.6);
+        }
+        .notes-btn {
+             position: absolute;
+            bottom: 4px;
+            right: 8px;
+            cursor: pointer;
+            color: rgba(0,0,0,0.3);
+            transition: color 0.2s;
+        }
+        .notes-btn:hover {
+             color: rgba(0,0,0,0.6);
+        }
+        .sticky-do { background-color: #fecaca; } /* Red-200 */
+        .sticky-schedule { background-color: #fef08a; } /* Yellow-200 */
+        .sticky-delegate { background-color: #bfdbfe; } /* Blue-200 */
+        .sticky-delete { background-color: #e5e7eb; } /* Gray-200 */
+    </style>
+</head>
+<body class="bg-[#dee2ca]">
+
+    <header class="p-4 md:p-6 lg:p-8 lg:pb-6">
+        <div class="bento-block p-6 rounded-lg shadow-lg text-center relative">
+            <h1 class="font-tangerine text-6xl md:text-7xl font-bold" style="color: #5665f2;">Revanthnow</h1>
+            <div class="absolute top-4 right-4 flex gap-4">
+                <a href="https://www.instagram.com/notyetrev/" target="_blank" class="text-gray-400 hover:text-[#5665f2] transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 012.153 2.153c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-2.153 2.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-2.153-2.153c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 012.153-2.153c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0-2a7 7 0 110 14 7 7 0 010-14zm6.406-1.185a1.285 1.285 0 100 2.57 1.285 1.285 0 000-2.57z" clip-rule="evenodd"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/ch-revanth" target="_blank" class="text-gray-400 hover:text-[#5665f2] transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://x.com/revanthnow" target="_blank" class="text-gray-400 hover:text-[#5665f2] transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="px-4 md:px-6 lg:px-8 lg:pb-6">
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+            <div class="bento-block md:col-span-4 p-6 rounded-lg shadow-lg flex flex-col justify-center">
+                 <div id="quote-display" class="text-center">
+                    <p class="text-2xl italic text-gray-700">"The secret of getting ahead is getting started."</p>
+                    <p class="text-md text-gray-500 mt-2">- Mark Twain</p>
+                 </div>
+            </div>
+            <div class="bento-block md:col-span-2 p-6 rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                <div id="time-display" class="text-4xl font-bold text-gray-800">12:00:00</div>
+                <div id="date-display" class="text-md text-gray-600">Sunday, 20 July 2025</div>
+            </div>
+        </div>
+    </section>
+
+    <main class="p-4 md:p-6 lg:p-8 lg:pt-0">
+        <div class="flex flex-col gap-6">
+            <div class="bento-block p-4 rounded-lg shadow-lg flex flex-col md:flex-row gap-4 h-[70vh]">
+                <div class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4 overflow-y-auto p-1">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Your Mind</h1>
+                        <p class="text-sm text-gray-600 mt-1">Drag landmarks to organize.</p>
+                    </div>
+                    <div id="end-of-day-section" class="border-t border-[#d6dbe6] pt-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-semibold text-gray-700">Daily Actions</h2>
+                            <input type="date" id="action-date-picker" class="px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                        </div>
+                        <p class="text-xs text-gray-500">Check habits performed on the selected date.</p>
+                        <div id="daily-actions-list" class="space-y-2 pr-2"></div>
+                        <button id="finalize-day-btn" class="w-full bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition mt-4">Finalize Day</button>
+                    </div>
+                    <div class="border-t border-[#d6dbe6] pt-4 space-y-4">
+                        <div id="action-buttons" class="space-y-3">
+                            <button id="show-add-form-btn" class="w-full bg-[#b1b9ed] text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition">Add New Habit</button>
+                            <button id="show-export-form-btn" class="w-full bg-[#b1b9ed] text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition">Export History</button>
+                        </div>
+                        <div id="add-habit-form" class="hidden space-y-3">
+                            <h2 class="text-lg font-semibold text-gray-700">Add a New Path</h2>
+                            <input type="text" id="new-habit-name" placeholder="Habit name" class="w-full px-3 py-2 border border-[#d6dbe6] rounded-md">
+                            <select id="new-habit-type" class="w-full px-3 py-2 border border-[#d6dbe6] rounded-md bg-white">
+                                <option value="positive">Positive Path</option>
+                                <option value="negative">Negative Path</option>
+                            </select>
+                            <div class="flex gap-2">
+                                <button id="add-habit-btn" class="w-full bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Add</button>
+                                <button id="cancel-add-btn" class="w-full bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Cancel</button>
+                            </div>
+                        </div>
+                        <div id="export-form" class="hidden space-y-3">
+                            <h2 class="text-lg font-semibold text-gray-700">Export History</h2>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label for="start-date" class="text-xs font-medium text-gray-600">Start</label>
+                                    <input type="date" id="start-date" class="w-full px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label for="end-date" class="text-xs font-medium text-gray-600">End</label>
+                                    <input type="date" id="end-date" class="w-full px-2 py-1 border border-[#d6dbe6] rounded-md text-sm">
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="export-btn" class="w-full bg-green-700 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800">Export</button>
+                                <button id="cancel-export-btn" class="w-full bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="field-container" class="flex-grow h-full w-full relative min-h-0">
+                    <div id="field">
+                        <div id="central-point" title="This is You">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="glow">
+                                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <circle cx="50" cy="50" r="40" fill="#5665f2" filter="url(#glow)"/>
+                                <text x="50" y="58" font-size="30" fill="white" text-anchor="middle">🧠</text>
+                            </svg>
+                        </div>
+                        <svg id="paths-svg">
+                            <defs>
+                                <filter id="path-glow">
+                                    <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="path-pulse-filter">
+                                    <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                        </svg>
+                        <div id="landmarks-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Pomodoro Timer</h2>
+                    <div class="flex-grow flex flex-col items-center justify-center">
+                        <div id="pomodoro-time" class="text-6xl font-bold text-gray-800">25:00</div>
+                        <div class="flex gap-2 mt-4">
+                            <button id="pomodoro-start" class="bg-[#5665f2] text-white px-4 py-2 rounded-md hover:bg-opacity-90">Start</button>
+                            <button id="pomodoro-pause" class="bg-[#d6dbe6] text-gray-800 px-4 py-2 rounded-md hover:bg-opacity-90">Pause</button>
+                            <button id="pomodoro-reset" class="bg-[#d6dbe6] text-gray-800 px-4 py-2 rounded-md hover:bg-opacity-90">Reset</button>
+                        </div>
+                        <div class="flex gap-2 mt-6 border-t border-[#d6dbe6] pt-4">
+                            <button class="pomodoro-mode-btn bg-[#b1b9ed] text-slate-800 text-sm px-3 py-1 rounded-full" data-time="1500">Pomodoro</button>
+                            <button class="pomodoro-mode-btn bg-transparent text-slate-600 text-sm px-3 py-1 rounded-full" data-time="300">Short Break</button>
+                            <button class="pomodoro-mode-btn bg-transparent text-slate-600 text-sm px-3 py-1 rounded-full" data-time="900">Long Break</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">To-Do List</h2>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-todo-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md focus:ring-2 focus:ring-[#5665f2] focus:outline-none bg-transparent" placeholder="Add a new task...">
+                        <button id="add-todo-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                    </div>
+                    <div id="todo-list" class="space-y-2 overflow-y-auto flex-grow"></div>
+                     <div id="completed-list" class="mt-4 border-t border-[#d6dbe6] pt-2 space-y-2 overflow-y-auto"></div>
+                </div>
+            </div>
+            
+            <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Urgent/Important Matrix</h2>
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="new-matrix-task-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="New task...">
+                    <select id="matrix-quadrant-select" class="px-3 py-2 border border-[#d6dbe6] rounded-md bg-white">
+                        <option value="do">Urgent & Important</option>
+                        <option value="schedule">Important, Not Urgent</option>
+                        <option value="delegate">Urgent, Not Important</option>
+                        <option value="delete">Not Urgent, Not Important</option>
+                    </select>
+                    <button id="add-matrix-task-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                        <h3 class="font-bold text-red-600 mb-2">Urgent & Important (Do)</h3>
+                        <div id="quadrant-do" class="space-y-2 overflow-y-auto"></div>
+                    </div>
+                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                        <h3 class="font-bold text-yellow-600 mb-2">Important, Not Urgent (Schedule)</h3>
+                        <div id="quadrant-schedule" class="space-y-2 overflow-y-auto"></div>
+                    </div>
+                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                        <h3 class="font-bold text-blue-600 mb-2">Urgent, Not Important (Delegate)</h3>
+                        <div id="quadrant-delegate" class="space-y-2 overflow-y-auto"></div>
+                    </div>
+                    <div class="border border-[#d6dbe6] rounded-lg p-3 flex flex-col">
+                        <h3 class="font-bold text-gray-600 mb-2">Not Urgent, Not Important (Delete)</h3>
+                        <div id="quadrant-delete" class="space-y-2 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Currently Reading</h2>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-book-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="Add a book title...">
+                        <button id="add-book-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                    </div>
+                    <div id="reading-list" class="space-y-2 overflow-y-auto flex-grow"></div>
+                </div>
+                <div class="bento-block p-6 rounded-lg shadow-lg flex flex-col">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Currently Watching</h2>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-media-input" class="flex-grow px-3 py-2 border border-[#d6dbe6] rounded-md bg-transparent" placeholder="Add a movie/show title...">
+                        <button id="add-media-btn" class="bg-[#5665f2] text-white font-bold px-4 rounded-md hover:bg-opacity-90">Add</button>
+                    </div>
+                    <div id="watching-list" class="space-y-2 overflow-y-auto flex-grow"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div class="fixed bottom-2 right-4 text-center text-xs text-gray-400">
+        <p>User ID:</p>
+        <p id="user-id-display" class="break-all">loading...</p>
+    </div>
+
+    <div id="custom-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden opacity-0"></div>
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, onSnapshot, updateDoc, deleteDoc, serverTimestamp, query, where, getDocs, Timestamp, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "DEMO", authDomain: "DEMO", projectId: "DEMO" };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-habit-tracker';
+        
+        let db, auth, userId, habits = [], draggedElement = null, todos = [], matrixTasks = [], readingList = [], watchingList = [];
+
+        // DOM Elements
+        const timeDisplay = document.getElementById('time-display');
+        const dateDisplay = document.getElementById('date-display');
+        const quoteDisplay = document.getElementById('quote-display');
+        const field = document.getElementById('field');
+        const pathsSvg = document.getElementById('paths-svg');
+        const landmarksContainer = document.getElementById('landmarks-container');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const dailyActionsList = document.getElementById('daily-actions-list');
+        const finalizeDayBtn = document.getElementById('finalize-day-btn');
+        const actionDatePicker = document.getElementById('action-date-picker');
+        const modal = document.getElementById('custom-modal');
+        const toastContainer = document.getElementById('toast-container');
+        const actionButtons = document.getElementById('action-buttons');
+        const addHabitForm = document.getElementById('add-habit-form');
+        const exportForm = document.getElementById('export-form');
+        const showAddFormBtn = document.getElementById('show-add-form-btn');
+        const showExportFormBtn = document.getElementById('show-export-form-btn');
+        const addHabitBtn = document.getElementById('add-habit-btn');
+        const cancelAddBtn = document.getElementById('cancel-add-btn');
+        const newHabitNameInput = document.getElementById('new-habit-name');
+        const newHabitTypeSelect = document.getElementById('new-habit-type');
+        const exportBtn = document.getElementById('export-btn');
+        const cancelExportBtn = document.getElementById('cancel-export-btn');
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        const pomodoroTime = document.getElementById('pomodoro-time');
+        const pomodoroStartBtn = document.getElementById('pomodoro-start');
+        const pomodoroPauseBtn = document.getElementById('pomodoro-pause');
+        const pomodoroResetBtn = document.getElementById('pomodoro-reset');
+        const pomodoroModeBtns = document.querySelectorAll('.pomodoro-mode-btn');
+        const newTodoInput = document.getElementById('new-todo-input');
+        const addTodoBtn = document.getElementById('add-todo-btn');
+        const todoList = document.getElementById('todo-list');
+        const completedList = document.getElementById('completed-list');
+        const newMatrixTaskInput = document.getElementById('new-matrix-task-input');
+        const matrixQuadrantSelect = document.getElementById('matrix-quadrant-select');
+        const addMatrixTaskBtn = document.getElementById('add-matrix-task-btn');
+        const quadrantDo = document.getElementById('quadrant-do');
+        const quadrantSchedule = document.getElementById('quadrant-schedule');
+        const quadrantDelegate = document.getElementById('quadrant-delegate');
+        const quadrantDelete = document.getElementById('quadrant-delete');
+        const newBookInput = document.getElementById('new-book-input');
+        const addBookBtn = document.getElementById('add-book-btn');
+        const readingListDiv = document.getElementById('reading-list');
+        const newMediaInput = document.getElementById('new-media-input');
+        const addMediaBtn = document.getElementById('add-media-btn');
+        const watchingListDiv = document.getElementById('watching-list');
+
+        // --- Quotes Logic ---
+        const quotes = [
+            { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+            { text: "Act as if what you do makes a difference. It does.", author: "William James" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" }
+        ];
+        let currentQuoteIndex = 0;
+
+        function showNextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            const quote = quotes[currentQuoteIndex];
+            quoteDisplay.classList.remove('quote-fade');
+            void quoteDisplay.offsetWidth;
+            quoteDisplay.classList.add('quote-fade');
+            quoteDisplay.innerHTML = `
+                <p class="text-2xl italic text-gray-700">"${quote.text}"</p>
+                <p class="text-md text-gray-500 mt-2">- ${quote.author}</p>
+            `;
+        }
+
+        // --- Date, Time Logic ---
+        function updateClock() {
+            const now = new Date();
+            timeDisplay.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            dateDisplay.textContent = now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // --- Pomodoro Logic ---
+        let pomodoroInterval;
+        let pomodoroSeconds = 1500;
+        let pomodoroIsRunning = false;
+
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(pomodoroSeconds / 60);
+            const seconds = pomodoroSeconds % 60;
+            pomodoroTime.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startPomodoro() {
+            if (pomodoroIsRunning) return;
+            pomodoroIsRunning = true;
+            pomodoroInterval = setInterval(() => {
+                pomodoroSeconds--;
+                updatePomodoroDisplay();
+                if (pomodoroSeconds <= 0) {
+                    clearInterval(pomodoroInterval);
+                    pomodoroIsRunning = false;
+                }
+            }, 1000);
+        }
+
+        function pausePomodoro() {
+            pomodoroIsRunning = false;
+            clearInterval(pomodoroInterval);
+        }
+
+        function resetPomodoro(seconds) {
+            pausePomodoro();
+            pomodoroSeconds = seconds;
+            updatePomodoroDisplay();
+        }
+        
+        pomodoroStartBtn.addEventListener('click', startPomodoro);
+        pomodoroPauseBtn.addEventListener('click', pausePomodoro);
+        pomodoroResetBtn.addEventListener('click', () => resetPomodoro(parseInt(document.querySelector('.pomodoro-mode-btn.bg-\\[\\#b1b9ed\\]').dataset.time)));
+        
+        pomodoroModeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                pomodoroModeBtns.forEach(b => b.classList.replace('bg-[#b1b9ed]', 'bg-transparent', 'text-slate-800', 'text-slate-600'));
+                btn.classList.replace('bg-transparent', 'bg-[#b1b9ed]');
+                btn.classList.replace('text-slate-600', 'text-slate-800');
+                resetPomodoro(parseInt(btn.dataset.time));
+            });
+        });
+
+        // --- To-Do List Logic ---
+        function renderTodos() {
+            todoList.innerHTML = '';
+            completedList.innerHTML = '';
+            
+            const activeTodos = todos.filter(t => !t.completed);
+            const completedTodos = todos.filter(t => t.completed);
+
+            activeTodos.forEach(todo => todoList.appendChild(createTodoElement(todo)));
+            
+            if (completedTodos.length > 0) {
+                const completedTitle = document.createElement('h3');
+                completedTitle.className = 'text-sm font-semibold text-gray-500';
+                completedTitle.textContent = 'Completed';
+                completedList.appendChild(completedTitle);
+                completedTodos.forEach(todo => completedList.appendChild(createTodoElement(todo)));
+            }
+        }
+
+        function createTodoElement(todo) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center p-2 rounded-md hover:bg-gray-100 todo-item-enter';
+            div.innerHTML = `
+                <input type="checkbox" data-id="${todo.id}" class="h-5 w-5 rounded border-gray-300 text-[#5665f2] focus:ring-[#5665f2]" ${todo.completed ? 'checked' : ''}>
+                <span class="ml-3 text-gray-700 flex-grow ${todo.completed ? 'line-through text-gray-400' : ''}">${todo.text}</span>
+                <button data-id="${todo.id}" class="delete-todo-btn text-red-400 hover:text-red-600 font-bold text-lg">&times;</button>
+            `;
+            div.querySelector('input[type="checkbox"]').addEventListener('change', (e) => toggleTodo(e.target.dataset.id, e.target.checked));
+            div.querySelector('.delete-todo-btn').addEventListener('click', (e) => deleteTodo(e.target.dataset.id));
+            return div;
+        }
+
+        async function addTodo() {
+            const text = newTodoInput.value.trim();
+            if (!text || !userId) return;
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/todos`), {
+                    text,
+                    completed: false,
+                    createdAt: serverTimestamp()
+                });
+                newTodoInput.value = '';
+            } catch (error) {
+                console.error("Error adding todo:", error);
+            }
+        }
+
+        async function toggleTodo(id, completed) {
+            if (!userId) return;
+            const todoRef = doc(db, `artifacts/${appId}/users/${userId}/todos`, id);
+            try {
+                await updateDoc(todoRef, { completed });
+            } catch (error) {
+                console.error("Error toggling todo:", error);
+            }
+        }
+
+        async function deleteTodo(id) {
+            if (!userId) return;
+            const todoRef = doc(db, `artifacts/${appId}/users/${userId}/todos`, id);
+            try {
+                await deleteDoc(todoRef);
+            } catch (error) {
+                console.error("Error deleting todo:", error);
+            }
+        }
+        
+        function setupTodoListener() {
+            if (!userId) return;
+            const todosCollection = collection(db, `artifacts/${appId}/users/${userId}/todos`);
+            const q = query(todosCollection, orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                todos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderTodos();
+            });
+        }
+        
+        addTodoBtn.addEventListener('click', addTodo);
+        newTodoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTodo();
+        });
+
+        // --- Eisenhower Matrix Logic ---
+        function renderMatrix() {
+            quadrantDo.innerHTML = '';
+            quadrantSchedule.innerHTML = '';
+            quadrantDelegate.innerHTML = '';
+            quadrantDelete.innerHTML = '';
+
+            matrixTasks.forEach(task => {
+                const note = document.createElement('div');
+                note.className = 'sticky-note';
+                note.innerHTML = `
+                    <p>${task.text}</p>
+                    <span data-id="${task.id}" class="item-delete-btn">&times;</span>
+                `;
+                note.querySelector('.item-delete-btn').addEventListener('click', (e) => deleteMatrixTask(e.target.dataset.id));
+
+                switch(task.quadrant) {
+                    case 'do':
+                        note.classList.add('sticky-do');
+                        quadrantDo.appendChild(note);
+                        break;
+                    case 'schedule':
+                        note.classList.add('sticky-schedule');
+                        quadrantSchedule.appendChild(note);
+                        break;
+                    case 'delegate':
+                        note.classList.add('sticky-delegate');
+                        quadrantDelegate.appendChild(note);
+                        break;
+                    case 'delete':
+                        note.classList.add('sticky-delete');
+                        quadrantDelete.appendChild(note);
+                        break;
+                }
+            });
+        }
+
+        async function addMatrixTask() {
+            const text = newMatrixTaskInput.value.trim();
+            const quadrant = matrixQuadrantSelect.value;
+            if (!text || !userId) return;
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/matrixTasks`), {
+                    text,
+                    quadrant,
+                    createdAt: serverTimestamp()
+                });
+                newMatrixTaskInput.value = '';
+            } catch (error) {
+                console.error("Error adding matrix task:", error);
+            }
+        }
+
+        async function deleteMatrixTask(id) {
+            if (!userId) return;
+            try {
+                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/matrixTasks`, id));
+            } catch (error) {
+                console.error("Error deleting matrix task:", error);
+            }
+        }
+
+        function setupMatrixListener() {
+            if (!userId) return;
+            const matrixCollection = collection(db, `artifacts/${appId}/users/${userId}/matrixTasks`);
+            const q = query(matrixCollection, orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                matrixTasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderMatrix();
+            });
+        }
+
+        addMatrixTaskBtn.addEventListener('click', addMatrixTask);
+        newMatrixTaskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addMatrixTask();
+        });
+        
+        // --- Reading/Watching Logic ---
+        function renderMediaList(list, container, collectionName) {
+            container.innerHTML = '';
+            list.forEach(item => {
+                const tile = document.createElement('div');
+                tile.className = 'media-tile bg-gray-100';
+                tile.innerHTML = `
+                    <p class="font-bold">${item.title}</p>
+                    <span data-id="${item.id}" class="item-delete-btn">&times;</span>
+                    <span data-id="${item.id}" class="notes-btn">📝</span>
+                `;
+                tile.querySelector('.item-delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteMediaItem(item.id, collectionName);
+                });
+                tile.querySelector('.notes-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showNotesModal(item.id, item.title, item.notes || '', collectionName);
+                });
+                container.appendChild(tile);
+            });
+        }
+
+        async function addMediaItem(type) {
+            const input = type === 'reading' ? newBookInput : newMediaInput;
+            const title = input.value.trim();
+            if (!title || !userId) return;
+            const collectionName = type === 'reading' ? 'readingItems' : 'watchingItems';
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/${collectionName}`), {
+                    title,
+                    notes: '',
+                    createdAt: serverTimestamp()
+                });
+                input.value = '';
+            } catch (error) {
+                console.error(`Error adding ${type} item:`, error);
+            }
+        }
+
+        async function deleteMediaItem(id, collectionName) {
+             if (!userId) return;
+            try {
+                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, id));
+            } catch(error) {
+                console.error(`Error deleting ${collectionName} item:`, error);
+            }
+        }
+        
+        function showNotesModal(id, title, notes, collectionName) {
+            showModal({
+                title: `Notes for ${title}`,
+                text: `<textarea id="notes-textarea" class="w-full h-32 p-2 border border-[#d6dbe6] rounded-md bg-transparent">${notes}</textarea>`,
+                confirmText: "Save",
+                cancelText: "Cancel",
+                onConfirm: () => {
+                    const newNotes = document.getElementById('notes-textarea').value;
+                    updateNotes(id, newNotes, collectionName);
+                }
+            });
+        }
+        
+        async function updateNotes(id, notes, collectionName) {
+            if (!userId) return;
+            try {
+                await updateDoc(doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, id), { notes });
+                showToast("Notes saved!");
+            } catch (error) {
+                console.error("Error saving notes:", error);
+                showToast("Failed to save notes.", "error");
+            }
+        }
+
+        function setupMediaListeners() {
+            if (!userId) return;
+            onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/readingItems`), orderBy("createdAt", "desc")), (snapshot) => {
+                readingList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderMediaList(readingList, readingListDiv, 'readingItems');
+            });
+            onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/watchingItems`), orderBy("createdAt", "desc")), (snapshot) => {
+                watchingList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderMediaList(watchingList, watchingListDiv, 'watchingItems');
+            });
+        }
+
+        addBookBtn.addEventListener('click', () => addMediaItem('reading'));
+        newBookInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addMediaItem('reading'); });
+        addMediaBtn.addEventListener('click', () => addMediaItem('watching'));
+        newMediaInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addMediaItem('watching'); });
+
+
+        // --- Habit Tracker Logic ---
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+            toast.className = `toast ${bgColor} text-white font-bold py-3 px-5 rounded-lg shadow-lg transform translate-y-2 opacity-0`;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.classList.remove('opacity-0', 'translate-y-2'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 4000);
+        };
+
+        function showModal({ title, text, confirmText = "OK", cancelText, onConfirm }) {
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full transform transition-all scale-95">
+                    <h2 class="text-xl font-bold mb-4">${title}</h2>
+                    <div class="text-gray-700 mb-6">${text}</div>
+                    <div class="flex justify-end gap-4">
+                        ${cancelText ? `<button id="modal-cancel-btn-inner" class="bg-[#d6dbe6] text-gray-800 font-bold py-2 px-4 rounded-md hover:bg-opacity-90">${cancelText}</button>` : ''}
+                        <button id="modal-confirm-btn-inner" class="bg-[#5665f2] text-white font-bold py-2 px-4 rounded-md hover:bg-opacity-90">${confirmText}</button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+
+            const hide = () => {
+                modal.classList.add('opacity-0');
+                modal.firstElementChild.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+
+            document.getElementById('modal-confirm-btn-inner').onclick = () => { if (onConfirm) onConfirm(); hide(); };
+            if (cancelText) {
+                document.getElementById('modal-cancel-btn-inner').onclick = hide;
+            }
+        };
+        
+        function renderDailyActions() {
+            dailyActionsList.innerHTML = '';
+            if (habits.length === 0) {
+                dailyActionsList.innerHTML = `<p class="text-sm text-gray-500">Add a habit to get started.</p>`;
+                return;
+            }
+            habits.forEach(habit => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center p-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer';
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.dataset.habitId = habit.id;
+                checkbox.className = 'h-5 w-5 rounded border-gray-300 text-[#5665f2] focus:ring-[#5665f2]';
+                const span = document.createElement('span');
+                span.textContent = habit.name;
+                span.className = `ml-3 text-sm font-medium ${habit.type === 'positive' ? 'text-green-800' : 'text-red-800'}`;
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                dailyActionsList.appendChild(label);
+            });
+        };
+
+        function renderField() {
+            if (!field) return;
+            landmarksContainer.innerHTML = '';
+            pathsSvg.innerHTML = '';
+            const fieldRect = field.getBoundingClientRect();
+            const centerX = fieldRect.width / 2;
+            const centerY = fieldRect.height / 2;
+            habits.forEach(habit => {
+                const landmark = document.createElement('div');
+                landmark.className = 'habit-landmark';
+                landmark.dataset.id = habit.id;
+                landmark.style.left = `${habit.position.x}%`;
+                landmark.style.top = `${habit.position.y}%`;
+                landmark.style.backgroundColor = habit.type === 'positive' ? '#16a34a' : '#dc2626';
+                landmark.onmousedown = startDrag;
+                const landmarkText = document.createElement('span');
+                landmarkText.textContent = habit.name;
+                const deleteBtn = document.createElement('span');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = '&#10060;';
+                deleteBtn.title = `Delete "${habit.name}"`;
+                deleteBtn.onclick = (e) => { e.stopPropagation(); confirmDeleteHabit(habit.id, habit.name); };
+                landmark.appendChild(deleteBtn);
+                landmark.appendChild(landmarkText);
+                landmarksContainer.appendChild(landmark);
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                path.id = `path-${habit.id}`;
+                path.setAttribute('x1', centerX);
+                path.setAttribute('y1', centerY);
+                path.setAttribute('x2', (habit.position.x / 100) * fieldRect.width);
+                path.setAttribute('y2', (habit.position.y / 100) * fieldRect.height);
+                path.setAttribute('stroke', habit.type === 'positive' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(50, 50, 50, 0.7)');
+                path.setAttribute('stroke-width', Math.max(1, habit.strength / 4));
+                path.setAttribute('opacity', Math.min(1, habit.strength / 40 + 0.1));
+                path.classList.add('habit-path');
+                pathsSvg.appendChild(path);
+            });
+        };
+
+        function formatDate(date) {
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+
+        async function finalizeDay() {
+            if (!userId) return;
+            const checkboxes = dailyActionsList.querySelectorAll('input[type="checkbox"]');
+            const promises = [];
+            const performedHabits = [];
+            const selectedDateStr = actionDatePicker.value;
+            if (!selectedDateStr) {
+                showModal({ title: "Error", text: "Please select a date to log actions." });
+                return;
+            }
+            const selectedDate = new Date(selectedDateStr + 'T00:00:00');
+
+            checkboxes.forEach(box => {
+                const habitId = box.dataset.habitId;
+                const habit = habits.find(h => h.id === habitId);
+                if (!habit) return;
+                let newStrength;
+                if (box.checked) {
+                    newStrength = (habit.strength || 0) + 10;
+                    performedHabits.push(habit.name);
+                    const pathElement = document.getElementById(`path-${habit.id}`);
+                    if (pathElement) {
+                        pathElement.classList.add('path-pulse');
+                        pathElement.addEventListener('animationend', () => pathElement.classList.remove('path-pulse'), { once: true });
+                    }
+                } else {
+                    newStrength = Math.max(0, (habit.strength || 0) - 2);
+                }
+                const habitRef = doc(db, `artifacts/${appId}/users/${userId}/habits`, habit.id);
+                promises.push(updateDoc(habitRef, { strength: newStrength, lastUpdated: serverTimestamp() }));
+            });
+
+            if (performedHabits.length > 0) {
+                const historyRef = collection(db, `artifacts/${appId}/users/${userId}/history`);
+                promises.push(addDoc(historyRef, {
+                    date: Timestamp.fromDate(selectedDate),
+                    habitsPerformed: performedHabits
+                }));
+            }
+
+            try {
+                await Promise.all(promises);
+                checkboxes.forEach(box => box.checked = false);
+                showToast(`Actions for ${formatDate(selectedDate)} logged!`);
+            } catch (error) {
+                console.error("Error finalizing day:", error);
+                showToast('Failed to log actions.', 'error');
+            }
+        };
+
+        async function addNewHabit() {
+            const name = newHabitNameInput.value.trim();
+            if (!name || !userId) {
+                showModal({ title: "Error", text: "Please enter a habit name." });
+                return;
+            }
+            const newHabitData = {
+                name, type: newHabitTypeSelect.value, strength: 5, createdAt: serverTimestamp(), lastUpdated: serverTimestamp(),
+                position: { x: Math.random() * 80 + 10, y: Math.random() * 80 + 10 }
+            };
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/users/${userId}/habits`), newHabitData);
+                newHabitNameInput.value = '';
+                addHabitForm.classList.add('hidden');
+                actionButtons.classList.remove('hidden');
+            } catch (error) {
+                console.error("Error adding new habit:", error);
+            }
+        };
+        
+        function confirmDeleteHabit(habitId, habitName) {
+            showModal({
+                title: "Delete Path?", text: `Are you sure you want to permanently delete "${habitName}"?`,
+                confirmText: "Delete", cancelText: "Cancel", onConfirm: () => deleteHabit(habitId)
+            });
+        };
+
+        async function deleteHabit(habitId) {
+            if (!userId) return;
+            try {
+                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/habits`, habitId));
+            } catch(error) {
+                console.error("Error deleting habit:", error);
+            }
+        };
+
+        async function exportHistoryToCSV() {
+            if (!userId) {
+                showModal({ title: "Error", text: "You must be signed in to export data." });
+                return;
+            }
+            const startDate = startDateInput.value ? new Date(startDateInput.value + 'T00:00:00') : null;
+            const endDate = endDateInput.value ? new Date(endDateInput.value + 'T23:59:59') : null;
+            if (!startDate || !endDate) {
+                showModal({ title: "Error", text: "Please select a valid start and end date." });
+                return;
+            }
+            const historyCollection = collection(db, `artifacts/${appId}/users/${userId}/history`);
+            const q = query(historyCollection, where("date", ">=", Timestamp.fromDate(startDate)), where("date", "<=", Timestamp.fromDate(endDate)));
+            try {
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    showModal({ title: "No Data", text: "No history found for the selected date range."});
+                    return;
+                }
+
+                const allHabitNames = habits.map(h => h.name);
+                const performedMap = {};
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const dateStr = formatDate(data.date.toDate());
+                    if (!performedMap[dateStr]) {
+                        performedMap[dateStr] = {};
+                    }
+                    data.habitsPerformed.forEach(habitName => {
+                        performedMap[dateStr][habitName] = true;
+                    });
+                });
+
+                const dateRange = [];
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDate) {
+                    dateRange.push(formatDate(currentDate));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                const headers = ["Date", ...allHabitNames].map(h => `"${h.replace(/"/g, '""')}"`).join(',');
+                let csvContent = headers + '\n';
+
+                dateRange.forEach(dateStr => {
+                    const row = [dateStr];
+                    allHabitNames.forEach(habitName => {
+                        const wasPerformed = performedMap[dateStr] && performedMap[dateStr][habitName];
+                        row.push(wasPerformed ? "Followed" : "Bunked");
+                    });
+                    csvContent += row.join(',') + '\n';
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "habit_history.csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                console.error("Error exporting history:", error);
+                showModal({ title: "Export Failed", text: "An error occurred while exporting your data."});
+            }
+        };
+
+        function startDrag(e) {
+            if (e.target.classList.contains('delete-btn')) return;
+            e.preventDefault();
+            draggedElement = e.currentTarget;
+            draggedElement.classList.add('dragging');
+            window.addEventListener('mousemove', onDrag);
+            window.addEventListener('mouseup', endDrag);
+        };
+
+        function onDrag(e) {
+            if (!draggedElement) return;
+            const fieldRect = field.getBoundingClientRect();
+            let newX = e.clientX - fieldRect.left;
+            let newY = e.clientY - fieldRect.top;
+            newX = Math.max(0, Math.min(newX, fieldRect.width));
+            newY = Math.max(0, Math.min(newY, fieldRect.height));
+            const newXPercent = (newX / fieldRect.width) * 100;
+            const newYPercent = (newY / fieldRect.height) * 100;
+            draggedElement.style.left = `${newXPercent}%`;
+            draggedElement.style.top = `${newYPercent}%`;
+            const path = document.getElementById(`path-${draggedElement.dataset.id}`);
+            if (path) {
+                path.setAttribute('x2', newX);
+                path.setAttribute('y2', newY);
+            }
+        };
+
+        async function endDrag() {
+            if (!draggedElement) return;
+            window.removeEventListener('mousemove', onDrag);
+            window.removeEventListener('mouseup', endDrag);
+            const habitId = draggedElement.dataset.id;
+            const finalPosition = { x: parseFloat(draggedElement.style.left), y: parseFloat(draggedElement.style.top) };
+            draggedElement.classList.remove('dragging');
+            draggedElement = null;
+            const habitRef = doc(db, `artifacts/${appId}/users/${userId}/habits`, habitId);
+            try {
+                await updateDoc(habitRef, { position: finalPosition });
+            } catch (error) {
+                console.error("Error updating habit position:", error);
+            }
+        };
+
+        function setupHabitListener() {
+            if (!userId) return;
+            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/habits`), (snapshot) => {
+                habits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderField();
+                renderDailyActions();
+            });
+        };
+
+        window.onload = async () => {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    userIdDisplay.textContent = userId;
+                    setupHabitListener();
+                    setupTodoListener();
+                    setupMatrixListener();
+                    setupMediaListeners();
+                } else {
+                    userIdDisplay.textContent = "Not signed in.";
+                }
+            });
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Authentication failed:", error);
+            }
+            
+            showAddFormBtn.addEventListener('click', () => {
+                actionButtons.classList.add('hidden');
+                addHabitForm.classList.remove('hidden');
+            });
+            cancelAddBtn.addEventListener('click', () => {
+                addHabitForm.classList.add('hidden');
+                actionButtons.classList.remove('hidden');
+            });
+            showExportFormBtn.addEventListener('click', () => {
+                actionButtons.classList.add('hidden');
+                exportForm.classList.remove('hidden');
+            });
+            cancelExportBtn.addEventListener('click', () => {
+                exportForm.classList.add('hidden');
+                actionButtons.classList.remove('hidden');
+            });
+
+            addHabitBtn.addEventListener('click', addNewHabit);
+            finalizeDayBtn.addEventListener('click', finalizeDay);
+            exportBtn.addEventListener('click', exportHistoryToCSV);
+            window.addEventListener('resize', renderField);
+
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            actionDatePicker.value = todayStr;
+            actionDatePicker.max = todayStr;
+            startDateInput.value = todayStr;
+            endDateInput.value = todayStr;
+            
+            updatePomodoroDisplay();
+            updateClock();
+            setInterval(updateClock, 1000);
+            setInterval(showNextQuote, 7000);
+        };
+    </script>
+</body>
+</html>
